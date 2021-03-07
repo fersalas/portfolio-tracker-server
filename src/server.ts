@@ -1,32 +1,48 @@
-import { ApolloServer } from "apollo-server-express";
-import Express from "express";
-import "reflect-metadata";
-import { buildSchema } from "type-graphql";
-import { connect } from "mongoose";
+import { ApolloServer } from 'apollo-server-express';
+import Express from 'express';
+import mongoose from 'mongoose';
+import 'reflect-metadata';
+import { buildSchema } from 'type-graphql';
+import debug from 'debug';
+
+const log: debug.IDebugger = debug('app');
 
 // resolvers
-import {LinksResolver} from "./resolvers/Links";
-
-
+import { LinksResolver } from './resolvers/Links';
 
 const main = async () => {
-const schema = await buildSchema({
+  const schema = await buildSchema({
     resolvers: [LinksResolver],
     emitSchemaFile: true,
     validate: false,
   });
 
-// create mongoose connection
-const mongoose = await connect('mongodb://localhost:27017/test', {useNewUrlParser: true});
-await mongoose.connection;
+  // Mongoose
+  log('MongoDB connection');
+  mongoose
+    .connect('mongodb://localhost:27017/portfolio-db', {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 5000,
+      useFindAndModify: false,
+    })
+    .then(() => {
+      log('MongoDB is connected');
+    })
+    .catch(err => {
+      log(`MongoDB connection unsuccessful`, err);
+    });
 
-
-const server = new ApolloServer({schema});
-const app = Express();
-server.applyMiddleware({app});
-app.listen({ port: 3333 }, () =>
-  console.log(`🚀 Server ready and listening at ==> http://localhost:3333${server.graphqlPath}`))
+  const server = new ApolloServer({ schema });
+  const app = Express();
+  server.applyMiddleware({ app });
+  app.listen({ port: 3333 }, () =>
+    console.log(
+      `🚀 Server ready and listening at ==> http://localhost:3333${server.graphqlPath}`,
+    ),
+  );
 };
-main().catch((error)=>{
-    console.log(error, 'error');
-})
+
+main().catch(error => {
+  console.log(error, 'There was an error starting the server');
+});
