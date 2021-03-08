@@ -17,7 +17,7 @@ input LinksInput {
 
 type Mutation {
   createLink(data: LinksInput!): Links!
-  deleteCategory(id: String!): Boolean!
+  deleteLink(id: String!): Boolean!
 }
 
 type Query {

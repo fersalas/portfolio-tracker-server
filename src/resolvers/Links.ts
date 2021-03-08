@@ -8,14 +8,14 @@ export class LinksResolver {
   async returnSingleLink(
     @Arg('id')
     id: string,
-  ) {
+  ): Promise<Links | null> {
     return await LinksModel.findById({
       _id: id,
     });
   }
 
   @Query(() => [Links])
-  async returnAllLinks() {
+  async returnAllLinks(): Promise<Links[]> {
     return await LinksModel.find();
   }
 
@@ -34,10 +34,10 @@ export class LinksResolver {
   }
 
   @Mutation(() => Boolean)
-  async deleteCategory(
+  async deleteLink(
     @Arg('id')
     id: string,
-  ) {
+  ): Promise<boolean> {
     await LinksModel.deleteOne({ id });
     return true;
   }

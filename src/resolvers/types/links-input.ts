@@ -9,5 +9,5 @@ export class LinksInput implements Partial<Links> {
 
   @Field()
   @Length(1, 255)
-  description: String;
+  description: string;
 }

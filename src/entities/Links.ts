@@ -11,11 +11,11 @@ export class Links {
 
   @Field()
   @Property()
-  url: String;
+  url: string;
 
   @Field()
   @Property()
-  description: String;
+  description: string;
 }
 
 export const LinksModel = getModelForClass(Links);
