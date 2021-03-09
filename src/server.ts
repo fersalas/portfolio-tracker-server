@@ -3,16 +3,18 @@ import Express from 'express';
 import mongoose from 'mongoose';
 import 'reflect-metadata';
 import { buildSchema } from 'type-graphql';
+import dotenv from 'dotenv';
 import debug from 'debug';
 
 const log: debug.IDebugger = debug('app');
 
 // resolvers
 import { LinksResolver } from './resolvers/Links';
+import { UserResolver } from './resolvers/User';
 
 const main = async () => {
   const schema = await buildSchema({
-    resolvers: [LinksResolver],
+    resolvers: [LinksResolver, UserResolver],
     emitSchemaFile: true,
     validate: false,
   });
@@ -32,7 +34,7 @@ const main = async () => {
     .catch(err => {
       log(`MongoDB connection unsuccessful`, err);
     });
-
+  dotenv.config();
   const server = new ApolloServer({ schema });
   const app = Express();
   server.applyMiddleware({ app });

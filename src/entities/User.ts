@@ -12,6 +12,13 @@ export class User {
   @Field()
   @Property({ required: true })
   email: string;
+
+  @Field()
+  @Property({ required: true })
+  password: string;
+
+  @Field({ nullable: true })
+  permissionLevel: number;
 }
 
 export const UserModel = getModelForClass(User);

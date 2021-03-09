@@ -3,6 +3,12 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+"""The AuthPayload model"""
+type AuthPayload {
+  token: String!
+  user: User!
+}
+
 """The Links model"""
 type Links {
   description: String!
@@ -17,10 +23,27 @@ input LinksInput {
 
 type Mutation {
   createLink(data: LinksInput!): Links!
+  createUser(data: UserInput!): AuthPayload!
   deleteLink(id: String!): Boolean!
 }
 
 type Query {
   returnAllLinks: [Links!]!
+  returnAllUsers: [User!]!
   returnSingleLink(id: String!): Links!
+  returnSingleUser(id: String!): User!
+}
+
+"""The User model"""
+type User {
+  email: String!
+  id: ID!
+  password: String!
+  permissionLevel: Float
+}
+
+input UserInput {
+  email: ID!
+  password: String!
+  permissionLevel: Float = 2
 }
